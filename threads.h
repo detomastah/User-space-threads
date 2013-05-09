@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include <sys/mman.h>
 
-#define TICS_PER_SEC  5
+#define TICS_PER_SEC  500
 #define uS_INTERVAL 1000000/TICS_PER_SEC
 
 #define THREAD_STACK_MARGIN 128

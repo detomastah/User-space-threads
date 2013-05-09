@@ -5,19 +5,24 @@ Thread t1, t2;
 int gn()
 {
   int j;
+  while(1)
   for (j = 0; j < 5; j++)
   {
     printf("GN -> %d\n", j);
-    thread_yield();
+    sleep(1);
+    //thread_yield();
   }
 }
 
 int fn() {
+
   int i;
+  while(1)
   for (i = 15; i > 0; i--)
   {
     printf("FN -> %d\n", i);
-    thread_yield();
+    sleep(1);
+    //thread_yield();
   }
 }
 

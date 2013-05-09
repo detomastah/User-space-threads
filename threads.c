@@ -59,8 +59,36 @@ void thread_pool_add(ThreadPtr t)
   threads[thread_count - 1] = t;
 }
 
+
+void event_handler (int signum)
+{
+  sigset_t mask;
+  sigemptyset (&mask);
+  sigaddset (&mask, SIGALRM);
+
+  if (sigprocmask(SIG_UNBLOCK, &mask, NULL) < 0) {
+    perror ("sigprocmask");
+    exit(1);
+  }
+
+  puts("Take over!");
+  thread_yield();
+}
+
 void thread_pool_wait()
 {
+   struct sigaction sa;
+   struct itimerval timer;
+
+   memset (&sa, 0, sizeof (sa));
+   sa.sa_handler = &event_handler;
+   sigaction (SIGALRM, &sa, NULL);
+   timer.it_value.tv_sec = 0;
+   timer.it_value.tv_usec = uS_INTERVAL;
+   timer.it_interval.tv_sec = 0;
+   timer.it_interval.tv_usec = uS_INTERVAL;
+   setitimer (ITIMER_REAL, &timer, NULL);
+
   current_thread = 0;
   context_switch(&main_thread.regs,
        threads[current_thread]->regs);
